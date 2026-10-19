@@ -1,0 +1,15 @@
+[Unit]
+Description=Hunter receiver
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ubuntu/hunter
+Environment=HUNTER_PORT=80
+ExecStart=/usr/bin/python3 /home/ubuntu/hunter/server.py
+Restart=always
+User=root
+StandardInput=null
+
+[Install]
+WantedBy=multi-user.target
