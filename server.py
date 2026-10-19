@@ -2,7 +2,7 @@
 import os
 import subprocess
 import urllib.parse
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 TOKEN = os.environ.get("HUNTER_TOKEN", "vnc9k2m4")
@@ -51,7 +51,7 @@ class H(BaseHTTPRequestHandler):
                 os.makedirs(d, exist_ok=True)
             with open(full, "w", encoding="utf-8") as f:
                 f.write(code)
-            out = run("git add -A && git -c user.email=a@b.c -c user.name=agent commit -m 'deploy %s' ; git push" % name)
+            out = run("git add -A && git -c user.email=a@b.c -c user.name=agent commit -m 'deploy %s'" % name)
             return self.send("ok, wrote %s (%s chars)\n\n%s" % (name, len(code), out))
 
         if p == "/read":
@@ -72,4 +72,4 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print("listening on :%s" % PORT)
-    HTTPServer(("0.0.0.0", PORT), H).serve_forever()
+    ThreadingHTTPServer(("0.0.0.0", PORT), H).serve_forever()

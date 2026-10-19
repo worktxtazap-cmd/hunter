@@ -1,1 +1,1 @@
-Agent wrote this file directly through the receiver.
+Agent can write files directly on the server.
