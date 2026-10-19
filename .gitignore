@@ -1,0 +1,6 @@
+.env
+*.session
+*.session-journal
+hunter.db
+__pycache__/
+reports/*.log
