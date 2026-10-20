@@ -2,8 +2,8 @@
 import json, os, sqlite3, subprocess, sys
 PY = '.venv/bin/python'
 NICHE = sys.argv[1]
-TITLES = {'crypto': 'крипта и арбитраж', 'infobiz': 'инфобиз и продюсеры',
-          'market': 'маркетплейсы и дропшип', 'smm': 'SMM и таргет', 'hr': 'вакансии и HR'}
+TITLES = {'freelance': 'фриланс и удалёнка', 'crypto': 'крипта и арбитраж', 'infobiz': 'инфобиз и продюсеры',
+          'market': 'маркетплейсы и дропшип', 'smm': 'SMM и таргет', 'hr': 'вакансии и HR', 'gamble': 'ставки и казино', 'dating': 'дейтинг и знакомства'}
 TARGETS = 'out/%s_targets.json' % NICHE
 def run(cmd):
     print('>', cmd[1] if len(cmd) > 1 else cmd[0], flush=True)
