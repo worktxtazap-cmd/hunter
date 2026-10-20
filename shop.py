@@ -107,9 +107,9 @@ def menu_kb():
         [b('base10', '10 чатов')],
         [b('clean', 'чистка'), b('bot', 'бот')],
     ]
-    for r in ready:
-        rows.append([Button.inline('%s — $%g' % (r['title'].split(':')[-1].strip(), r['price']),
-                                   ('p:' + r['code']).encode())])
+    btns = [Button.inline('%s — $%g' % (r['title'], r['price']), ('p:' + r['code']).encode()) for r in ready]
+    for i in range(0, len(btns), 2):
+        rows.append(btns[i:i + 2])
     rows.append([Button.inline('купон', b'coupon'), Button.inline('кошелёк', b'wallet')])
     return rows
 def back_kb():
