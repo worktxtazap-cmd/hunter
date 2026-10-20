@@ -49,12 +49,12 @@ if len(allr) >= 2000:
         '1000 отборных контактов | сортировка по premium и активности | txt для инвайтера', top,
         'СРЕЗ 1000 лучших контактов')
 _, pr = rd('premium')
-if len(pr) >= 200:
+if len(pr) >= 100:
     add('%s_premium' % NICHE, short + ' · premium', 12.0,
         'только Telegram Premium | платёжеспособная аудитория | txt для инвайтера', pr,
         'СРЕЗ: только Premium')
 _, co = rd('core')
-if len(co) >= 100:
+if len(co) >= 50:
     add('%s_core' % NICHE, short + ' · ядро', 10.0,
         'ядро: онлайн или недавно и в 2  чатах ниши | самый редкий слой', co,
         'СРЕЗ: ядро')
