@@ -77,3 +77,15 @@ SEND_MIN_SCORE = 8
 SEND_LIMIT = 8
 SEND_PAUSE = 30
 STOP_KEYWORDS = ['розыгрыш', 'конкурс', 'резюме', 'вакансия', 'в команду', 'ищем людей', 'зарплат', 'оклад']
+
+# добавлено 20.10: минус мёртвые источники, плюс найденные глобальным поиском
+DEAD = {'digitalchatikk', 'frilans_uslugi_vakansii', 'rabota_podrabotka_frilanserom', 'freelanceadm', 'freelancevacans'}
+SOURCES = [s for s in SOURCES if s not in DEAD]
+SOURCES += ['parsingmaster', 'Rassylka_v_LS_Telegram', 'tel_secret', 'newsletter_tg',
+            'freelance_vacancies_jobs', 'zakazy_frilans011', 'AI_FreeLance_info',
+            'upworker_chat', 'birzhha', 'pabotnik_goda', 'frilanserov_chat']
+
+# каналы выкинуты: у постов нет автора, вместо них чаты обсуждений
+CHANS = {'digitaltender','workzavr','ipomogator','freelancetaverna','parsingmaster','Rassylka_v_LS_Telegram','tel_secret','newsletter_tg','zakazy_frilans011','AI_FreeLance_info','pabotnik_goda'}
+SOURCES = [x for x in SOURCES if x not in CHANS]
+SOURCES += ['digitaltalks', 'vimblechat', 'best_mailing', 'vakansist_workk']
