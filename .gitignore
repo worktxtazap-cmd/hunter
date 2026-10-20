@@ -4,3 +4,7 @@
 hunter.db
 __pycache__/
 reports/*.log
+.venv/
+*.log
+login.hash
+venv.ready

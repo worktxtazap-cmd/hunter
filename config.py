@@ -14,7 +14,7 @@ SOURCES = [
     "digitaltender",
     "workzavr",
     "ipomogator",
-    "novobranez",
+
     "freelancetaverna",
 ]
 
