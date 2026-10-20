@@ -10,6 +10,8 @@ Restart=always
 RestartSec=10
 User=root
 StandardInput=null
+StandardOutput=append:/home/ubuntu/hunter/hunter.log
+StandardError=append:/home/ubuntu/hunter/hunter.log
 
 [Install]
 WantedBy=multi-user.target
