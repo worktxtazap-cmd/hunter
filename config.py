@@ -1,137 +1,62 @@
+# ===== ИСТОЧНИКИ (Telegram чаты и каналы) =====
 SOURCES = [
-'onlayn_rabota',
-'frilancru',
-'jobospherechat',
-'profiwork',
-'proffreelancee_chat',
-'workk_onchat',
-'frilanc',
-'freelance_birzha',
-'birjafreelance',
-'freelance_in_telegram',
-'freelance_chatik0',
-'freelance_chat_ru',
-'RussianFreelance',
-'freelance_vakansiii',
-'frilans_chat3',
-'freeassistant',
-'frilans_chatik',
-'free_lancers_chat',
-'freelance_work',
-'freelance_freelancer',
-'freelancers_vacancy',
-'freelancevacans',
-'frilans_uslugi_vakansii',
-'rabota_podrabotka_frilanserom',
-'digitalchatikk',
-'freelanser2',
-'yourfreelancework',
-'smm_seo_cms',
-'frilanserSM',
-'reklamafree007',
-'freelanceadm',
-'digitaltender',
-'workzavr',
-'ipomogator',
-'freelancetaverna',
+    'onlayn_rabota', 'frilancru', 'jobospherechat', 'profiwork',
+    'proffreelancee_chat', 'workk_onchat', 'frilanc', 'freelance_birzha',
+    'birjafreelance', 'freelance_in_telegram', 'freelance_chatik0',
+    'freelance_chat_ru', 'RussianFreelance', 'freelance_vakansiii',
+    'frilans_chat3', 'freeassistant', 'frilans_chatik', 'free_lancers_chat',
+    'freelance_work', 'freelance_freelancer', 'freelancers_vacancy',
+    'freelancevacans', 'frilans_uslugi_vakansii',
+    'rabota_podrabotka_frilanserom', 'digitalchatikk', 'freelanser2',
+    'yourfreelancework', 'smm_seo_cms', 'frilanserSM', 'reklamafree007',
+    'freelanceadm', 'digitaltender', 'workzavr', 'ipomogator',
+    'freelancetaverna',
 ]
 
-DEMAND_KEYWORDS = [
-'ищу парсер',
-'нужен парсер',
-'нужен скраппер',
-'спарсить',
-'парсинг',
-'нужна база',
-'ищу базу',
-'куплю базу',
-'база контактов',
-'база данных',
-'нужна рассылка',
-'рассылка по чатам',
-'нужен инвайт',
-'нужен бот',
-'сделать бота',
-'нужен лендинг',
-'нужен сайт',
-'нужен дизайнер',
-'нужен скрипт',
-'нужна автоматизация',
-'нужен сбор',
-'нужны лиды',
-'ищу лиды',
-'ищу исполнителя',
-'нужны контакты',
-'сбор контактов',
-'нужен специалист',
-'ищу специалиста',
-'нужен помощник',
-'нужен копирайтер',
-'нужен контент',
-'нужен таргетолог',
-'нужен маркетолог',
-'нужен смм',
-'нужна реклама',
-'нужен телеграм бот',
-'нужна настройка',
-'нужен телеграм',
-'нужна выгрузка',
-'собрать базу',
+# ===== СИЛЬНЫЙ СПРОС: человек ищет исполнителя =====
+DEMAND_STRONG = [
+    'ищу', 'ищем', 'ищет', 'нужен', 'нужна', 'нужно', 'нужны', 'требуется',
+    'куплю', 'интересует', 'кто может', 'кто сможет', 'кто сделает',
+    'кто умеет', 'кто поможет', 'подскажите', 'посоветуйте', 'есть кто',
+    'кто-нибудь', 'актуально',
 ]
 
-DEMAND_MARKERS = [
-'ищу',
-'ищем',
-'нужен',
-'нужна',
-'нужно',
-'нужны',
-'требуется',
-'куплю',
-'интересует',
-'кто может',
-'кто сможет',
-'кто сделает',
-'подскажите',
-'посоветуйте',
-'актуально',
+# ===== ТЕМА заявки =====
+DEMAND_TOPIC = [
+    'парсер', 'парсинг', 'спарсить', 'скрап', 'собрать баз', 'сбор баз',
+    'база контактов', 'базу контактов', 'базы контактов', 'база данных',
+    'базу данных', 'выгрузк', 'сбор контактов', 'нужны контакты',
+    'телеграм баз', 'тг баз', 'рассылк', 'инвайт', 'телеграм бот',
+    'тг бот', 'бот', 'автоматизац', 'скрипт', 'лендинг', 'сайт',
+    'дизайн', 'логотип', 'копирайт', 'контент', 'смм', 'таргет',
+    'реклама', 'маркетолог', 'специалист', 'исполнител', 'помощник',
+    'ассистент', 'лиды',
 ]
 
+# ===== ПРИЗНАКИ РЕКЛАМЫ (пишет исполнитель) =====
 AD_MARKERS = [
-'подписывайтесь',
-'мой канал',
-'наш канал',
-'прайс',
-'тариф',
-'наши услуги',
-'мы предлагаем',
-'предлагаю',
-'помогу',
-'возьму',
-'выполню',
-'оказываю',
-'работаю с',
-'передано через',
-'портфолио',
-'отзывы',
-'пишите в лс',
-'стоимость',
-'цена',
-'ценник',
-'недорого',
-'под ключ',
+    'предлагаю', 'оказываю', 'выполню', 'возьму', 'помогу', 'наши услуги',
+    'мы предлагаем', 'прайс', 'тариф', 'стоимость', 'ценник', 'недорого',
+    'под ключ', 'отзывы', 'портфолио', 'работаю с', 'заказать',
+    'свяжитесь', 'по вопросам', 'опыт работы', 'гарантия',
 ]
 
-STOP_KEYWORDS = [
-'продаю',
-'розыгрыш',
-'конкурс',
-'вакансия',
-'резюме',
-]
+STOP_KEYWORDS = ['розыгрыш', 'конкурс', 'резюме']
 
-MIN_SCORE = 3
+# совместимость со старым кодом
+DEMAND_KEYWORDS = DEMAND_STRONG + DEMAND_TOPIC
+DEMAND_MARKERS = DEMAND_STRONG
+
+# цена вида 2000р, 300 руб, 50$
+PRICE_RE = r'(\d[\d\s]{2,})(₽|руб|р\.|у\.е|\$|грн|usdt|ton)'
+
+MIN_SCORE = 5
 MIN_TEXT_LEN = 15
 MAX_TEXT_LEN = 900
 POLL_INTERVAL = 120
-MESSAGES_PER_CHAT = 25
+MESSAGES_PER_CHAT = 30
+
+# рассылка
+SEND_LIMIT = 12
+SEND_MIN_SCORE = 8
+SEND_PAUSE = 30
