@@ -11,3 +11,4 @@ hunter.db-shm
 qr.png
 *.log
 .env
+sessions/*-journal
