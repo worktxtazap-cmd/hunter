@@ -86,9 +86,9 @@ async def send(text):
     if not await c.is_user_authorized():
         print('watch: NOT AUTHORIZED', SESSION)
         return
-    await c.send_message(PEER, text)
+    m = await c.send_message(PEER, text)
+    print('алерт отправлен, id', m.id, m.date)
     await c.disconnect()
-    print('алерт отправлен')
 
 def main():
     b = backup()
