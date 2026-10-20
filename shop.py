@@ -80,8 +80,9 @@ def box(title, body):
 
 def card(c, cop=None):
     price, off = price_with(c, cop)
-    body = ['ник · id · имя · телефон', 'боты и дубли вычищены',
-            'сегмент A / B / C / D', '', 'срок 1-3 часа']
+    body = (c['descr'].split(' | ') if c['descr'] else
+            ['ник · id · имя · телефон', 'боты и дубли вычищены',
+            'сегмент A / B / C / D', '', 'срок 1-3 часа'])
     txt = box(c['title'], body)
     if off:
         txt += chr(10) + '<s>$%g</s> минус $%g по купону %s' % (float(c['price']), off, cop['code'])
@@ -91,13 +92,26 @@ def card(c, cop=None):
 STATE = {}
 
 def menu_kb():
-    return [
-        [Button.inline('база по чату', b'p:base1'), Button.inline('пакет из 3 чатов', b'p:base3')],
-        [Button.inline('пакет из 10 чатов', b'p:base10'), Button.inline('чистка базы', b'p:clean')],
-        [Button.inline('телеграм-бот', b'p:bot'), Button.inline('купон', b'coupon')],
-        [Button.inline('кошелёк', b'wallet')],
+    con = db()
+    pr = dict(con.execute('select code, price from products').fetchall())
+    ready = con.execute("select code, title, price from products where delivery='ready' and active=1 order by price").fetchall()
+    con.close()
+    def b(code, name):
+        p = pr.get(code)
+        if p is None:
+            return Button.inline(name, ('p:' + code).encode())
+        t = '+$%g' % p if code == 'clean' else ('от $%g' % p if code == 'bot' else '$%g' % p)
+        return Button.inline(name + ' — ' + t, ('p:' + code).encode())
+    rows = [
+        [b('base1', '1 чат'), b('base3', '3 чата')],
+        [b('base10', '10 чатов')],
+        [b('clean', 'чистка'), b('bot', 'бот')],
     ]
-
+    for r in ready:
+        rows.append([Button.inline('%s — $%g' % (r['title'].split(':')[-1].strip(), r['price']),
+                                   ('p:' + r['code']).encode())])
+    rows.append([Button.inline('купон', b'coupon'), Button.inline('кошелёк', b'wallet')])
+    return rows
 def back_kb():
     return [[Button.inline('назад', b'menu')]]
 
@@ -109,7 +123,7 @@ async def main():
     print('касса запущена:', me.username)
 
     async def show_menu(uid, edit=None, note=''):
-        txt = 'базы участников чатов, парсинг, боты' + chr(10) + 'выбирай, что нужно — счёт придёт сюда же'
+        txt = 'демо бесплатно, без предоплаты' + chr(10) + 'выбирай, что нужно — счёт придёт сюда же'
         if note:
             txt += chr(10) + chr(10) + note
         if edit:
@@ -239,7 +253,10 @@ async def main():
                             con.execute("update coupons set used = used + 1 where code=?", (r['coupon'],))
                         con.commit()
                         con.close()
-                        await client.send_message(r['client_id'], 'оплата получена. собираю базу, вернусь со ссылками в течение 1-3 часов.')
+                        txt = 'оплата получена. собираю базу, вернусь со ссылками в течение 1-3 часов.'
+                        if str(r['product']).startswith('ready'):
+                            txt = 'оплата получена. выдаю файл в течение 5 минут.'
+                        await client.send_message(r['client_id'], txt)
                         if OWNER:
                             await client.send_message(OWNER, 'ПРОДАЖА $%g · %s' % (float(r['amount']), r['product']))
             except Exception as ex:

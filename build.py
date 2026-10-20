@@ -32,11 +32,20 @@ def main():
     con.row_factory = sqlite3.Row
     rows = con.execute(
         "select o.*, p.delivery, p.title from orders o join products p on p.code = o.product "
-        "where o.status = 'paid' and p.delivery = 'base'").fetchall()
+        "where o.status = 'paid' and p.delivery in ('base','ready')").fetchall()
     if not rows:
         print('оплаченных заказов нет')
         return
     for o in rows:
+        if o['delivery'] == 'ready':
+            tag = o['product'].replace('ready_', '')
+            tg('sendMessage', chat_id=o['client_id'],
+               text='оплата принята. база готова.\nдемо: %sdemo_%s.html\nфайл: %sready/%s_pack.tar.gz\n\nвнутри: all.csv, core.csv, premium.csv, txt для инвайтера, README' % (REPO, tag, REPO, tag))
+            con.execute("update orders set status='delivered', delivered_at=? where id=?", (now_iso(), o['id']))
+            con.commit()
+            if OWNER:
+                tg('sendMessage', chat_id=OWNER, text='выдал готовую базу, заказ %s' % o['id'])
+            continue
         chat = clean(o['note'])
         print('собираю', chat, 'для', o['client_id'])
         r = subprocess.run([PY, 'demo.py', chat, '1000'], capture_output=True, text=True)

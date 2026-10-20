@@ -1,12 +1,30 @@
-from telethon.sync import TelegramClient
-P = '+380665930791'
-for name, aid, ah in [('desktop', 2040, 'b18441a1ff607e10a989891a5462e627'),
-                      ('android', 6, 'eb06d4abfb49dc3eeb1aeb98ae0f581e')]:
-    c = TelegramClient('/tmp/probe_' + name, aid, ah)
-    c.connect()
-    try:
-        r = c.send_code_request(P)
-        print(name, '->', type(r.type).__name__, '| next:', type(r.next_type).__name__ if r.next_type else None, '| timeout:', r.timeout)
-    except Exception as e:
-        print(name, 'ERR', type(e).__name__, str(e)[:100])
-    c.disconnect()
+# probe.py - разведка источников: тип, размер, вступили ли, отдаётся ли состав
+import asyncio, os, sys
+from dotenv import load_dotenv
+from telethon import TelegramClient
+from config import SOURCES
+load_dotenv('.env')
+S = os.getenv('SENDER_SESSION', 'sessions/sender')
+c = TelegramClient(S, int(os.getenv('API_ID', '0')), os.getenv('API_HASH', ''))
+A = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+B = int(sys.argv[2]) if len(sys.argv) > 2 else len(SOURCES)
+async def main():
+    await c.connect()
+    print('сессия:', S, '| всего источников:', len(SOURCES))
+    for ch in SOURCES[A:B]:
+        try:
+            e = await c.get_entity(ch)
+        except Exception as ex:
+            print(ch, 'ERR', str(ex)[:45]); continue
+        left = getattr(e, 'left', False)
+        n = 0
+        if not left:
+            try:
+                async for u in c.iter_participants(e, limit=40):
+                    n += 1
+            except Exception as ex:
+                n = 'ERR ' + str(ex)[:28]
+        print('%-26s %-8s members=%-7s left=%-5s yield=%s' % (
+            ch, type(e).__name__, getattr(e, 'participants_count', '?'), left, n))
+    await c.disconnect()
+asyncio.run(main())
