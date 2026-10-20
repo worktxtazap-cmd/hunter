@@ -1,0 +1,15 @@
+[Unit]
+Description=Hunter outreach scanner
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ubuntu/hunter
+ExecStart=/home/ubuntu/hunter/.venv/bin/python -u /home/ubuntu/hunter/hunter.py
+Restart=always
+RestartSec=10
+User=root
+StandardInput=null
+
+[Install]
+WantedBy=multi-user.target
