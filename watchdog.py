@@ -14,7 +14,7 @@ API_HASH = os.getenv('API_HASH', '')
 SESSION = os.getenv('WATCH_SESSION', 'sessions/watch')
 PEER = os.getenv('ALERT_PEER', 'me')
 
-SERVICES = ['hunter.service', 'hunter-recv.service']
+SERVICES = ['hunter.service', 'hunter-recv.service', 'hunter-shop.service']
 TIMERS = ['hunter-sync.timer', 'hunter-watch.timer', 'hunter-drafts.timer', 'hunter-build.timer']
 LOGS = ['logs/sync1.log', 'logs/sync2.log']
 BACKUP_DIR = 'backups'

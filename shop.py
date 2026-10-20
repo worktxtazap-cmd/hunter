@@ -14,6 +14,7 @@ BOT_TOKEN = os.getenv('BOT_TOKEN', '')
 PAY_TOKEN = os.getenv('CRYPTOPAY_TOKEN', '')
 OWNER = int(os.getenv('OWNER_ID', '0'))
 SESSION = os.getenv('SHOP_SESSION', 'sessions/shop')
+PHOTO = 'assets/banner.png'
 
 PAY_API = 'https://pay.crypt.bot/api/'
 
@@ -29,7 +30,7 @@ def pay(method, **params):
     req = urllib.request.Request(
         PAY_API + method,
         data=json.dumps(params).encode(),
-        headers={'Crypto-Pay-API-Token': PAY_TOKEN, 'Content-Type': 'application/json'})
+        headers={'Crypto-Pay-API-Token': PAY_TOKEN, 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) Chrome/120'})
     with urllib.request.urlopen(req, timeout=30) as r:
         d = json.loads(r.read().decode())
     if not d.get('ok'):
@@ -70,23 +71,32 @@ def price_with(c, cop):
         off = float(cop['amount_off'])
     return round(max(0.5, p - off), 2), off
 
+W = 30
+
+def box(title, body):
+    if body:
+        return '<b>' + title.upper() + '</b>' + chr(10) + chr(10) + chr(10).join(body)
+    return '<b>' + title.upper() + '</b>'
+
 def card(c, cop=None):
     price, off = price_with(c, cop)
-    lines = ['<b>%s</b>' % c['title'], '',
-             '<code>%s</code>' % c['descr'].replace('. ', '\n'),
-             '',
-             '<b>$%s</b> за %s' % (('%g' % price), c['unit'])]
+    body = ['ник · id · имя · телефон', 'боты и дубли вычищены',
+            'сегмент A / B / C / D', '', 'срок 1-3 часа']
+    txt = box(c['title'], body)
     if off:
-        lines.append('<s>$%g</s>  минус $%g по купону %s' % (float(c['price']), off, cop['code']))
-    lines += ['', 'срок 1-3 часа · оплата USDT или TON']
-    return '\n'.join(lines)
+        txt += chr(10) + '<s>$%g</s> минус $%g по купону %s' % (float(c['price']), off, cop['code'])
+    txt += chr(10) + '<b>$%g</b> за %s' % (price, c['unit'])
+    return txt
 
 STATE = {}
 
 def menu_kb():
-    rows = [[Button.inline('%s · $%g' % (c['title'], float(c['price'])), ('p:' + c['code']).encode())] for c in products()]
-    rows.append([Button.inline('купон', b'coupon'), Button.inline('кошелёк', b'wallet')])
-    return rows
+    return [
+        [Button.inline('база по чату', b'p:base1'), Button.inline('пакет из 3 чатов', b'p:base3')],
+        [Button.inline('пакет из 10 чатов', b'p:base10'), Button.inline('чистка базы', b'p:clean')],
+        [Button.inline('телеграм-бот', b'p:bot'), Button.inline('купон', b'coupon')],
+        [Button.inline('кошелёк', b'wallet')],
+    ]
 
 def back_kb():
     return [[Button.inline('назад', b'menu')]]
@@ -99,11 +109,16 @@ async def main():
     print('касса запущена:', me.username)
 
     async def show_menu(uid, edit=None, note=''):
-        txt = '<b>Касса</b>\nВыбирай, что нужно — счёт придёт сюда же.'
+        txt = 'базы участников чатов, парсинг, боты' + chr(10) + 'выбирай, что нужно — счёт придёт сюда же'
         if note:
-            txt += '\n\n' + note
+            txt += chr(10) + chr(10) + note
         if edit:
-            await edit.edit(txt, buttons=menu_kb())
+            try:
+                await edit.edit(caption=txt, buttons=menu_kb())
+            except Exception:
+                await edit.edit(txt, buttons=menu_kb())
+        elif os.path.exists(PHOTO):
+            await client.send_file(uid, PHOTO, caption=txt, buttons=menu_kb())
         else:
             await client.send_message(uid, txt, buttons=menu_kb())
 
@@ -114,6 +129,11 @@ async def main():
         uid = e.sender_id
         txt = (e.raw_text or '').strip()
         st = STATE.setdefault(uid, {})
+        if e.photo and uid == OWNER:
+            os.makedirs('assets', exist_ok=True)
+            await e.download_media(PHOTO)
+            await e.respond('баннер сохранён')
+            return
 
         if txt.startswith('/start'):
             parts = txt.split()
