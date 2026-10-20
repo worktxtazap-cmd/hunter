@@ -1,4 +1,4 @@
-DEMO = 'https://cdn.jsdelivr.net/gh/worktxtazap-cmd/hunter@main/demo_preview.html'
+DEMO = 'https://cdn.jsdelivr.net/gh/worktxtazap-cmd/hunter@main/demo.html'
 
 PARSER = '''Привет! Видел ваш пост в чате - я как раз по базам и парсингу.
 
