@@ -77,8 +77,11 @@ def check():
                 p.append('%s в кулдауне ещё %d ч' % (name, left // 3600))
     d = con.execute("select count(*) from hits where status='draft'").fetchone()[0]
     s = con.execute("select count(*) from hits where sent_at is not null").fetchone()[0]
+    g = con.execute("select count(*) from hits where status='new' and username is not null and is_ad=0 and is_seller=0 and is_hr=0 and is_closed=0 and score>=7").fetchone()[0]
+    if g < 10:
+        p.append('мало целей: годных всего %d' % g)
     con.close()
-    return p, d, s
+    return p, d, s, g
 
 async def send(text):
     c = TelegramClient(SESSION, API_ID, API_HASH)
@@ -94,14 +97,14 @@ def main():
     b = backup()
     if b:
         print(b)
-    probs, drafts, sent = check()
+    probs, drafts, sent, good = check()
     ts = datetime.now().strftime('%d.%m %H:%M')
     for x in probs:
         print(ts, 'ПРОБЛЕМА:', x)
-    print('%s заготовок %d, отправлено всего %d, место %d МБ' % (ts, drafts, sent, disk_mb()))
+    print('%s заготовок %d, отправлено всего %d, годных %d, место %d МБ' % (ts, drafts, sent, good, disk_mb()))
     if probs or '--test' in sys.argv:
         txt = 'HUNTER сторож ' + ts + '\n' + ('\n'.join(probs) if probs else 'тест, всё ок')
-        txt += '\nзаготовок: %d, отправлено: %d' % (drafts, sent)
+        txt += '\nзаготовок: %d, отправлено: %d, годных: %d' % (drafts, sent, good)
         asyncio.run(send(txt))
 
 main()
