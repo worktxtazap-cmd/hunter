@@ -51,8 +51,12 @@ def main():
         out_csv = 'base_%s.csv' % chat
         out_html = 'base_%s.html' % chat
         os.replace(src, out_csv)
+        extra = []
+        if chat == 'freelance_chatik0':
+            subprocess.run(['cp', out_csv, 'demo_freelance_chatik0.csv'])
+            extra = ['demo_freelance_chatik0.csv']
         subprocess.run([PY, 'mkpreview.py', out_csv, out_html], capture_output=True, text=True)
-        subprocess.run(['git', 'add', out_csv, out_html])
+        subprocess.run(['git', 'add', out_csv, out_html] + extra)
         subprocess.run(['git', 'commit', '-m', 'база %s' % chat], capture_output=True, text=True)
         subprocess.run(['git', 'push'], capture_output=True, text=True)
         with open(out_csv, encoding='utf-8-sig') as f:
