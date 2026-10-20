@@ -15,7 +15,7 @@ SESSION = os.getenv('WATCH_SESSION', 'sessions/watch')
 PEER = os.getenv('ALERT_PEER', 'me')
 
 SERVICES = ['hunter.service', 'hunter-recv.service']
-TIMERS = ['hunter-sync.timer', 'hunter-watch.timer']
+TIMERS = ['hunter-sync.timer', 'hunter-watch.timer', 'hunter-drafts.timer']
 LOGS = ['logs/sync1.log', 'logs/sync2.log']
 BACKUP_DIR = 'backups'
 KEEP_DAYS = 7
