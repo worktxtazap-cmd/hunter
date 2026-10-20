@@ -55,7 +55,7 @@ def digest(t):
 
 
 def evaluate(text):
-    low = text.lower()
+    low = re.sub(r"[#_*·•|]", "", text.lower())
     for s in config.STOP_KEYWORDS:
         if s in low:
             return None
@@ -66,7 +66,7 @@ def evaluate(text):
         return None
     score = 0
     if strong:
-        score += 5 + min(len(strong) - 1, 2)
+        score += 7 + min(len(strong) - 1, 2)
     if topic:
         score += 3 + min(len(topic) - 1, 2)
     if re.search(config.PRICE_RE, low):
@@ -128,14 +128,12 @@ async def notify(found):
     if not found:
         return
     found.sort(key=lambda x: -x[2])
-    lines = ["Новых заявок: " + str(len(found))]
-    for username, kw, score, text in found[:15]:
-        lines.append("")
-        lines.append(("@" + username) if username else "без юзернейма")
-        lines.append("[" + str(score) + "] " + str(kw))
-        lines.append(text[:220].replace("\n", " "))
-        if username:
-            lines.append("https://t.me/" + username)
+    named = [f for f in found if f[0]]
+    lines = ["Новых заявок: %d, с ником: %d" % (len(found), len(named))]
+    for username, kw, score, text in named[:15]:
+        lines.append("@%s [%s %d]" % (username, kw, score))
+    if len(named) > 15:
+        lines.append("... ещё " + str(len(named) - 15))
     try:
         await client.send_message(NOTIFY_TARGET, "\n".join(lines))
     except Exception as e:

@@ -11,9 +11,10 @@ load_dotenv('.env')
 DB = os.getenv('HUNTER_DB', 'hunter.db')
 API_ID = int(os.getenv('API_ID', '0'))
 API_HASH = os.getenv('API_HASH', '')
-MIN_SCORE = int(os.getenv('SEND_MIN_SCORE', '6'))
+MIN_SCORE = int(os.getenv('SEND_MIN_SCORE', '7'))
 
 ACC, SESSION, n, mode, args = 'acc2', 'sessions/drafts2.session', 10, 'make', []
+both = False
 i = 1
 while i < len(sys.argv):
     a = sys.argv[i]
@@ -23,6 +24,8 @@ while i < len(sys.argv):
         SESSION = sys.argv[i + 1]; i += 2; continue
     if a == '--n' and i + 1 < len(sys.argv):
         n = int(sys.argv[i + 1]); i += 2; continue
+    if a == '--both':
+        both = True; i += 1; continue
     if a in ('--list', '--sent', '--sent-all', '--back'):
         mode = a[2:]; i += 1; continue
     args.append(a); i += 1
@@ -92,6 +95,11 @@ def main():
         mark(con, [], 'sent', datetime.now(timezone.utc).isoformat(timespec='seconds'))
     elif mode == 'back':
         mark(con, args, 'new', None)
+    elif both:
+        for a, ss in (('acc1', 'sessions/drafts1.session'), ('acc2', 'sessions/drafts2.session')):
+            globals()['ACC'] = a
+            globals()['SESSION'] = ss
+            asyncio.run(make(con))
     else:
         asyncio.run(make(con))
     con.close()
