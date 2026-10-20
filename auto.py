@@ -6,9 +6,9 @@ TITLES = {'crypto': 'крипта и арбитраж', 'infobiz': 'инфоби
           'market': 'маркетплейсы и дропшип', 'smm': 'SMM и таргет', 'hr': 'вакансии и HR'}
 TARGETS = 'out/%s_targets.json' % NICHE
 def run(cmd):
-    r = subprocess.run(cmd, capture_output=True, text=True)
-    print('>', cmd[1] if len(cmd) > 1 else cmd[0], (r.stdout or r.stderr).strip()[-160:])
-    return r
+    print('>', cmd[1] if len(cmd) > 1 else cmd[0], flush=True)
+    return subprocess.run(cmd)
+
 if not os.path.exists(TARGETS):
     run([PY, 'discover.py', NICHE])
 run([PY, 'join2.py', TARGETS])

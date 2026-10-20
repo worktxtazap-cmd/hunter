@@ -266,3 +266,22 @@ NEXT
 - две сессии в один файл -> database is locked; у каждой службы своя сессия
 - PIL 13 есть, шрифты с кириллицей: FreeSans, Liberation
 - assets/bg.png - фон для креатива, assets/banner.png - готовый креатив
+════════ АКТУАЛЬНОЕ НА 20.10 20:30 UTC (агент) ════════
+НОВОЕ ЗА ВЕЧЕР
+- прямой доступ к серверу через приёмник: /run?token= и /deploy?token= (пишет файл, коммитит, пушит)
+- конвейер ниш: discover.py - join2.py - pack.py - clean.py - preview.py - tar - push - товар
+- auto.py: python -u auto.py <ниша> (полный прогон)
+- на полке: freelance 6018 (ядро 402), crypto 6450 (ядро 114), infobiz 937
+- товары delivery=ready, выдача через build.py
+- меню бота динамическое из products
+- demand.py: аудит спроса по категориям
+ГРАБЛИ
+- deploy пушит out/ в публичную репу: полные all.csv открыты
+- auto.py больше не глотает вывод
+- pack.py пишет csv и txt: брать только .csv
+- join2 может висеть на FloodWait - джойны идемпотентны
+- /run рвёт вызов при sleep больше ~30 сек
+ОТКРЫТО
+- боевой круг оплаты не подтверждён
+- ниши market/smm/hr/gamble/dating не добиты
+- таймер на auto.py
