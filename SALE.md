@@ -16,6 +16,6 @@
 4. залить в репу, отдать ссылку
 
 РЕКВИЗИТЫ (вписать)
-USDT TRC20:
-TON:
-карта:
+USDT TRC20: THFxPcnzXMX65MYKVCzMXVTrLd1FQMGqCM (сеть TRC20, Binance)
+TON: уточним позже
+карта: уточним позже
