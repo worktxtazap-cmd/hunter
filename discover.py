@@ -12,7 +12,9 @@ NICHE = sys.argv[1]
 async def main():
     await c.connect()
     seen, cand = set(), []
-    for q in KEYWORDS.get(NICHE, []):
+    qs = KEYWORDS.get(NICHE, [])
+    qs = qs + [q + ' чат' for q in qs if 'чат' not in q] + [q + ' группа' for q in qs]
+    for q in qs:
         try:
             res = await c(SearchRequest(q=q, limit=50))
         except Exception as ex:
@@ -28,13 +30,22 @@ async def main():
         await asyncio.sleep(2)
     cand.sort(key=lambda x: -x[1])
     good = []
-    for u, n in cand[:80]:
+    for u, n in cand[:150]:
         try:
             e = await c.get_entity(u)
             fc = (await c(GetChannelFullRequest(e))).full_chat if False else (await c(GetFullChannelRequest(e))).full_chat
-            if getattr(fc, 'participants_hidden', True):
-                print('hidden', u, n); continue
-            good.append([u, n]); print('OK', u, n)
+            if not getattr(fc, 'participants_hidden', True):
+                good.append([u, n]); print('OK', u, n)
+            else:
+                lid = getattr(fc, 'linked_chat_id', None)
+                if not lid:
+                    print('hidden', u, n); continue
+                le = await c.get_entity(lid)
+                lf = (await c(GetFullChannelRequest(le))).full_chat
+                if getattr(le, 'megagroup', False) and not getattr(lf, 'participants_hidden', True):
+                    good.append([getattr(le, 'username', str(lid)), 0]); print('OK linked', u)
+                else:
+                    print('hidden ', u, n)
         except Exception as ex:
             print('err', u, str(ex)[:35])
         await asyncio.sleep(2)

@@ -106,6 +106,8 @@ def menu_kb():
         [b('base1', '1 чат'), b('base3', '3 чата')],
         [b('base10', '10 чатов')],
         [b('clean', 'чистка'), b('bot', 'бот')],
+        [b('rassylka', 'рассылка 1000'), b('rassylka3', 'рассылка 3000')],
+        [b('podpiska', 'подписка на базы')],
     ]
     btns = [Button.inline('%s — $%g' % (r['title'], r['price']), ('p:' + r['code']).encode()) for r in ready]
     for i in range(0, len(btns), 2):
