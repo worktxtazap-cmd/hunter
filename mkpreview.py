@@ -1,9 +1,9 @@
-import csv, html, os
+import csv, html, os, sys
 
-src = 'demo_freelance_chatik0.csv'
+src = sys.argv[1] if len(sys.argv) > 1 else 'demo_freelance_chatik0.csv'
 rows = list(csv.reader(open(src, encoding='utf-8-sig'), delimiter=';'))
 head, body = rows[0], rows[1:]
-name = os.path.basename(src).replace('demo_', '').replace('.csv', '')
+name = os.path.basename(src).replace('demo_', '').replace('base_', '').replace('.csv', '')
 a = sum(1 for r in body if r[4] == 'A')
 b = sum(1 for r in body if r[4] == 'B')
 u = sum(1 for r in body if r[1])
@@ -26,5 +26,5 @@ for r in body[:80]:
 o.append('</table>')
 o.append('<div class="box"><b>Цены:</b> 1 чат — $5, 3 чата — $12, 10 чатов — $30. '
          'Чистка и сегмент — +$5. Срок 1-3 часа. Оплата USDT/TON или карта. Пишите: @softzoneua2026</div>')
-open('demo_preview.html', 'w', encoding='utf-8').write('\n'.join(o))
+open(sys.argv[2] if len(sys.argv) > 2 else 'demo_preview.html', 'w', encoding='utf-8').write('\n'.join(o))
 print('превью готово, строк:', min(80, len(body)))
