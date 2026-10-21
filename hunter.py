@@ -11,6 +11,7 @@ from telethon import TelegramClient
 from telethon.errors import FloodWaitError
 
 import config
+import templates
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ API_HASH = os.getenv("API_HASH", "")
 
 SESSION_NAME = os.getenv("SESSION_NAME", "hunter")
 NOTIFY_TARGET = os.getenv("NOTIFY_TARGET", "me")
+NOTIFY_MAX = int(os.getenv("NOTIFY_MAX", "6"))
 DB_PATH = "hunter.db"
 
 client = TelegramClient(SESSION_NAME, API_ID, API_HASH)
@@ -84,10 +86,10 @@ def save_hit(chat, msg_id, user_id, username, text, keyword, score):
     try:
         cur = con.execute("INSERT OR IGNORE INTO seen (uid, h) VALUES (?, ?)", (user_id or 0, digest(text)))
         if cur.rowcount == 0:
-            return False
+            return None
         cur = con.execute("INSERT OR IGNORE INTO hits (chat, msg_id, user_id, username, text, keyword, score, status, found_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'new', ?)", (chat, msg_id, user_id, username, text, keyword, score, datetime.now(timezone.utc).isoformat(timespec="seconds")))
         con.commit()
-        return cur.rowcount > 0
+        return cur.lastrowid if cur.rowcount > 0 else None
     finally:
         con.close()
 
@@ -119,38 +121,53 @@ async def scan(source):
             sender = None
         username = getattr(sender, "username", None)
         uid = getattr(sender, "id", None)
-        if save_hit(str(source), msg.id, uid, username, text, kw, score):
-            found.append((username, kw, score, text))
+        hid = save_hit(str(source), msg.id, uid, username, text, kw, score)
+        if hid:
+            found.append((username, kw, score, text, str(source), msg.id, hid))
     return found
 
 
 async def notify(found):
-    if not found:
+    hits = [f for f in found if f[0]]
+    if not hits:
         return
-    found.sort(key=lambda x: -x[2])
-    named = [f for f in found if f[0]]
-    lines = ["Новых заявок: %d, с ником: %d" % (len(found), len(named))]
-    for username, kw, score, text in named[:15]:
-        lines.append("@%s [%s %d]" % (username, kw, score))
-    if len(named) > 15:
-        lines.append("... ещё " + str(len(named) - 15))
-    try:
-        await client.send_message(NOTIFY_TARGET, "\n".join(lines))
-    except Exception as e:
-        print("notify", e)
+    hits.sort(key=lambda x: -x[2])
+    hits = hits[:NOTIFY_MAX]
+    con = db()
+    for username, kw, score, text, chat, mid, hid in hits:
+        snip = " ".join((text or "").split())[:120]
+        body = "https://t.me/%s/%s\n@%s\nчто искал: %s\n\n%s\n\n%s" % (chat, mid, username, snip, templates.pick(kw, text, chat), templates.LINK)
+        ok = False
+        try:
+            await client.send_message(NOTIFY_TARGET, body)
+            ok = True
+        except FloodWaitError as e:
+            await asyncio.sleep(e.seconds + 3)
+            try:
+                await client.send_message(NOTIFY_TARGET, body)
+                ok = True
+            except Exception as e2:
+                print("notify", e2)
+        except Exception as e:
+            print("notify", e)
+        if ok:
+            con.execute("update hits set status='hot' where id=?", (hid,))
+        await asyncio.sleep(1)
+    con.commit()
+    con.close()
 
 
 async def main():
     init_db()
     await client.start()
     once = len(sys.argv) > 1 and sys.argv[1] == "--once"
-    print("Охотник запущен. Источников: " + str(len(config.SOURCES)))
+    print("hunter started. sources: " + str(len(config.SOURCES)))
     while True:
         found = []
         for source in config.SOURCES:
             found.extend(await scan(source))
         await notify(found)
-        print("цикл ок, новых: " + str(len(found)))
+        print("cycle ok, new: " + str(len(found)))
         if once:
             break
         await asyncio.sleep(config.POLL_INTERVAL)
