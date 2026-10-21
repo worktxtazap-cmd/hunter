@@ -23,3 +23,5 @@ def pick(keyword, text='', chat=''):
     if 'рассылк' in kw or 'инвайт' in kw:
         return RASSLKA
     return PARSER
+
+LINK = '@hunter_pay_bot'

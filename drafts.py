@@ -26,7 +26,7 @@ while i < len(sys.argv):
         n = int(sys.argv[i + 1]); i += 2; continue
     if a == '--both':
         both = True; i += 1; continue
-    if a in ('--list', '--sent', '--sent-all', '--back'):
+    if a in ('--list', '--sent', '--sent-all', '--back', '--wipe'):
         mode = a[2:]; i += 1; continue
     args.append(a); i += 1
 
@@ -38,18 +38,19 @@ def pick(con, k):
         "where status='new' and username is not null and score>=? "
         "and is_ad=0 and is_seller=0 and is_hr=0 and is_closed=0 "
         "order by score desc, id desc", (MIN_SCORE,)).fetchall()
-    out, seen_t = [], set()
+    out, seen_t, seen_u = [], set(), set()
     for r in rows:
         u = r[1].lower()
         t = ' '.join((r[4] or '').lower().split())[:70]
-        if u in done or u in draft or t in seen_t:
+        if u in done or u in draft or u in seen_u or t in seen_t:
             continue
         seen_t.add(t)
+        seen_u.add(u)
         out.append(r)
     return out[:k]
 
 def text_of(r):
-    return templates.pick(r[3], r[4], r[5]).replace(templates.DEMO, '').strip()
+    return templates.pick(r[3], r[4], r[5]).strip()
 
 async def make(con):
     tg = pick(con, n)
@@ -60,16 +61,36 @@ async def make(con):
     await c.connect()
     if not await c.is_user_authorized():
         print('NOT AUTHORIZED', SESSION); return
-    await c.send_message('me', 'ЗАГОТОВКИ %s, %d шт.\nТапни ник, открой чат, скопируй текст ниже и отправь.\nСсылку кидай вторым сообщением: %s' % (ACC, len(tg), templates.DEMO))
-    for j, r in enumerate(tg, 1):
+    await c.send_message('me', 'ЗАГОТОВКИ %s, %d шт. тапни ник, скопируй текст ниже' % (ACC, len(tg)))
+    for j2, r in enumerate(tg, 1):
         hid, u, sc, kw, txt, ch = r
-        await c.send_message('me', '%d. @%s  [%s %s]' % (j, u, kw, sc))
-        await c.send_message('me', text_of(r))
+        body = '@%s\n\n%s\n\n%s' % (u, text_of(r), templates.LINK)
+        await c.send_message('me', body)
         con.execute("update hits set status='draft' where id=?", (hid,))
-        print(j, '@' + u, sc, kw)
+        print(j2, '@' + u, sc, kw)
     con.commit()
     await c.disconnect()
     print('готово, заготовок:', len(tg))
+
+PAT = ('заготовки', 'привет! видел ваш пост', 'делаю телеграм-ботов', 'пример, как выглядит база')
+
+async def wipe(con):
+    c = TelegramClient(SESSION, API_ID, API_HASH)
+    await c.connect()
+    ids = []
+    async for m in c.iter_messages('me', limit=400):
+        t = (m.message or '').lower()
+        if not t:
+            continue
+        head = t.split('.')[0]
+        if any(p in t for p in PAT) or (head.isdigit() and '@' in t[:45]):
+            ids.append(m.id)
+    if ids:
+        await c.delete_messages('me', ids)
+    con.execute("update hits set status='new' where status='draft'")
+    con.commit()
+    await c.disconnect()
+    print('удалено сообщений:', len(ids))
 
 def show(con):
     for r in con.execute("select id, username, score from hits where status='draft' and username is not null order by id"):
@@ -87,7 +108,9 @@ def mark(con, users, status, sent):
 
 def main():
     con = sqlite3.connect(DB, timeout=30)
-    if mode == 'list':
+    if mode == 'wipe':
+        asyncio.run(wipe(con))
+    elif mode == 'list':
         show(con)
     elif mode == 'sent':
         mark(con, args, 'sent', datetime.now(timezone.utc).isoformat(timespec='seconds'))
