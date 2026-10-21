@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from telethon import TelegramClient
 
 import templates
+from telethon.errors import FloodWaitError
 
 load_dotenv('.env')
 DB = os.getenv('HUNTER_DB', 'hunter.db')
@@ -69,7 +70,8 @@ async def make(con):
     for j2, r in enumerate(tg, 1):
         hid, u, sc, kw, txt, ch = r
         body = '@%s\n\n%s\n\n%s' % (u, text_of(r), templates.LINK)
-        await c.send_message('me', body)
+        await say(c, body)
+        await asyncio.sleep(2)
         con.execute("update hits set status='draft' where id=?", (hid,))
         print(j2, '@' + u, sc, kw)
     con.commit()

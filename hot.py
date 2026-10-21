@@ -3,11 +3,19 @@ import asyncio, os, sqlite3
 from dotenv import load_dotenv
 from telethon import TelegramClient
 import templates
+from telethon.errors import FloodWaitError
 load_dotenv('.env')
 DB = os.getenv('HUNTER_DB', 'hunter.db')
 SESSION = os.getenv('HOT_SESSION', 'sessions/hot.session')
 MIN = int(os.getenv('HOT_MIN_SCORE', '7'))
 LIM = int(os.getenv('HOT_LIMIT', '15'))
+async def say(c, txt):
+    for _ in range(5):
+        try:
+            return await c.send_message('me', txt)
+        except FloodWaitError as e:
+            print('wait', e.seconds); await asyncio.sleep(e.seconds + 3)
+
 async def main():
     con = sqlite3.connect(DB, timeout=30)
     rows = con.execute(
@@ -28,7 +36,8 @@ async def main():
     for hid, chat, mid, u, kw, txt in rows:
         snip = ' '.join((txt or '').split())[:110]
         body = 'https://t.me/%s/%s\n@%s\nчто искал: %s\n\n%s\n\n%s' % (chat, mid, u, snip, templates.pick(kw, txt, chat), templates.LINK)
-        await c.send_message('me', body)
+        await say(c, body)
+        await asyncio.sleep(2)
         con.execute("update hits set status='hot' where id=?", (hid,))
         print('@' + u, chat)
     con.commit()
