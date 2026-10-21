@@ -15,6 +15,9 @@ async def main():
         "where status='new' and username is not null and score>=? "
         "and is_ad=0 and is_seller=0 and is_hr=0 and is_closed=0 "
         "order by id desc limit ?", (MIN, LIM)).fetchall()
+    pend = con.execute("select count(*) from hits where status='hot'").fetchone()[0]
+    if pend >= int(os.getenv('HOT_MAX_PEND', '25')):
+        print('в Избранном уже %d неотвеченных, хватит' % pend); return
     if not rows:
         print('горячих нет'); return
     c = TelegramClient(SESSION, int(os.getenv('API_ID','0')), os.getenv('API_HASH',''))

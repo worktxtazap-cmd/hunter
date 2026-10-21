@@ -53,7 +53,11 @@ def text_of(r):
     return templates.pick(r[3], r[4], r[5]).strip()
 
 async def make(con):
-    tg = pick(con, n)
+    pend = con.execute("select count(*) from hits where status='draft'").fetchone()[0]
+    room = int(os.getenv('DRAFTS_MAX_PEND', '40')) - pend
+    if room <= 0:
+        print('в Избранном уже %d незакрытых, хватит' % pend); return
+    tg = pick(con, min(n, room))
     if not tg:
         print('целей нет — всё разобрано')
         return
