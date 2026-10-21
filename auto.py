@@ -7,10 +7,13 @@ TITLES = {'freelance': 'фриланс и удалёнка', 'crypto': 'крип
 TARGETS = 'out/%s_targets.json' % NICHE
 def run(cmd):
     print('>', cmd[1] if len(cmd) > 1 else cmd[0], flush=True)
-    return subprocess.run(cmd)
+    return subprocess.run(['flock', '-w', '900', '/tmp/hunter.lock'] + cmd)
 
 if not os.path.exists(TARGETS):
     run([PY, 'discover.py', NICHE])
+tg = json.load(open(TARGETS))
+if not tg:
+    print('нет целей:', NICHE); sys.exit(0)
 run([PY, 'join2.py', TARGETS])
 run([PY, 'pack.py', TARGETS, '1000'])
 files = [f for f in os.listdir('out') if f.startswith('%s_targets_' % NICHE) and f.endswith('.csv')]

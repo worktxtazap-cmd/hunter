@@ -1,4 +1,0 @@
-hello world
-line+two
-pct% amp& hash# quote" apos'
-end
