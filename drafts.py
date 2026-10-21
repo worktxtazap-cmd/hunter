@@ -14,6 +14,13 @@ API_ID = int(os.getenv('API_ID', '0'))
 API_HASH = os.getenv('API_HASH', '')
 MIN_SCORE = int(os.getenv('SEND_MIN_SCORE', '7'))
 
+async def say(c, txt):
+    for _ in range(5):
+        try:
+            return await c.send_message('me', txt)
+        except FloodWaitError as e:
+            print('wait', e.seconds); await asyncio.sleep(e.seconds + 3)
+
 ACC, SESSION, n, mode, args = 'acc2', 'sessions/drafts2.session', 10, 'make', []
 both = False
 i = 1
