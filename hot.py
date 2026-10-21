@@ -9,6 +9,7 @@ DB = os.getenv('HUNTER_DB', 'hunter.db')
 SESSION = os.getenv('HOT_SESSION', 'sessions/hot.session')
 MIN = int(os.getenv('HOT_MIN_SCORE', '7'))
 LIM = int(os.getenv('HOT_LIMIT', '15'))
+MINB = int(os.getenv('HOT_MIN_BATCH', '3'))
 async def say(c, txt):
     for _ in range(5):
         try:
@@ -26,8 +27,8 @@ async def main():
     pend = con.execute("select count(*) from hits where status='hot'").fetchone()[0]
     if pend >= int(os.getenv('HOT_MAX_PEND', '25')):
         print('в Избранном уже %d неотвеченных, хватит' % pend); return
-    if not rows:
-        print('горячих нет'); return
+    if len(rows) < MINB:
+        print('горячих мало:', len(rows)); return
     c = TelegramClient(SESSION, int(os.getenv('API_ID','0')), os.getenv('API_HASH',''))
     await c.connect()
     if not await c.is_user_authorized():
