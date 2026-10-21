@@ -93,7 +93,7 @@ async def wipe(con):
             ids.append(m.id)
     if ids:
         await c.delete_messages('me', ids)
-    con.execute("update hits set status='new' where status='draft'")
+    con.execute("update hits set status='new' where status in ('draft','hot')")
     con.commit()
     await c.disconnect()
     print('удалено сообщений:', len(ids))
