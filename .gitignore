@@ -12,3 +12,7 @@ qr.png
 *.log
 .env
 sessions/*-journal
+.venv/
+backups/
+__pycache__/
+out/*.bak
