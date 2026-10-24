@@ -1234,12 +1234,8 @@ async def main():
                     await e.respond('не смог разобрать эту ссылку: %s' % type(ex2).__name__)
             return
         if txt.startswith('/selftest') or txt.startswith('/pool'):
-        return
-    if txt.startswith('/selftest') or txt.startswith('/pool'):
-        return
-    if txt.startswith('/selftest') or txt.startswith('/pool'):
-        return
-    await e.respond('нажми /start. команды: /find, /add, /join, /probe, /build')
+            return
+        await e.respond('нажми /start. команды: /find, /add, /join, /probe, /build')
 
     @client.on(events.CallbackQuery())
     async def cb(e):
