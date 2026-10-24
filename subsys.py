@@ -280,24 +280,38 @@ async def probe_parse(link):
     except Exception as ex:
         log('probe %s: get_entity %s' % (link, err_ru(ex)))
         return False, err_ru(ex)
+    log('probe %s: type=%s mega=%s bcast=%s cnt=%s left=%s' % (
+        link, type(ent).__name__, getattr(ent, 'megagroup', None),
+        getattr(ent, 'broadcast', None), getattr(ent, 'participants_count', None),
+        getattr(ent, 'left', None)))
     try:
         try:
             await join_ent(ent)
             joined = True
         except Exception as ex:
             log('probe %s: join %s' % (link, err_ru(ex)))
-        await asyncio.sleep(1)
+        await asyncio.sleep(2)
         n, err = 0, 'участники скрыты'
         for agg in (False, True):
             try:
                 got = await u.get_participants(ent, limit=60, aggressive=agg)
                 n = len(got)
-                log('probe %s: agg=%s n=%d' % (link, agg, n))
+                log('probe %s: get_participants agg=%s n=%d' % (link, agg, n))
                 if n:
                     break
             except Exception as ex:
                 err = err_ru(ex)
-                log('probe %s: agg=%s fail %s' % (link, agg, err))
+                log('probe %s: get_participants agg=%s %s: %s' % (link, agg, type(ex).__name__, ex))
+        if n == 0:
+            try:
+                r = await u(functions.channels.GetParticipantsRequest(
+                    channel=ent, filter=types.ChannelParticipantsRecent(), offset=0, limit=100, hash=0))
+                log('probe %s: raw GetParticipants n=%d' % (link, len(r.participants)))
+                if len(r.participants):
+                    n = len(r.participants)
+                    err = ''
+            except Exception as ex:
+                log('probe %s: raw GetParticipants %s: %s' % (link, type(ex).__name__, ex))
         if n == 0:
             return False, err
         return True, 'видно %d' % n
@@ -322,7 +336,7 @@ async def find_chats(word, limit=25):
             if kind == 'contacts':
                 r = await u(functions.contacts.SearchRequest(q=word, limit=limit))
             else:
-                r = await u(functions.messages.SearchGlobalRequest(q=word, limit=limit))
+                r = await u(functions.messages.SearchGlobalRequest(q=word, filter=types.InputMessagesFilterEmpty(), min_date=None, max_date=None, offset_rate=0, offset_peer=types.InputPeerEmpty(), offset_id=0, limit=limit))
         except FloodWaitError as ex:
             await asyncio.sleep(min(ex.seconds, 20))
             continue
