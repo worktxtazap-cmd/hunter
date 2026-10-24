@@ -664,6 +664,51 @@ async def selftest(e):
     await e.reply(chr(10).join(out))
 
 
+async def scan(e, arg=''):
+    u = _parser()
+    if u is None:
+        return await e.reply('нет парсер-сессии')
+    words = arg.split() if arg else ['crypto', 'bitcoin', 'trading', 'cryptocurrency', 'blockchain',
+                                     'крипта', 'биткоин', 'трейдинг', 'чат', 'chat', 'crypto chat', 'trade']
+    m = await e.reply('сканирую ' + str(len(words)) + ' слов, ищу группы...')
+    seen, groups = set(), []
+    for w in words:
+        try:
+            r = await u(functions.contacts.SearchRequest(q=w, limit=50))
+        except Exception as ex:
+            diag('scan ' + w + ': ' + err_ru(ex))
+            continue
+        for c in list(getattr(r, 'chats', []) or []):
+            un = getattr(c, 'username', None)
+            if not un:
+                continue
+            if not (getattr(c, 'megagroup', False) or isinstance(c, types.Chat)):
+                continue
+            if un.lower() in seen:
+                continue
+            seen.add(un.lower())
+            groups.append((un, getattr(c, 'title', '') or ''))
+        await asyncio.sleep(1)
+    diag('scan: слов ' + str(len(words)) + ', групп ' + str(len(groups)))
+    lines = ['групп найдено: ' + str(len(groups)), '']
+    good = []
+    for un, t in groups[:10]:
+        ok, why = await probe_parse('@' + un)
+        lines.append(('ОК  ' if ok else 'нет ') + '@' + un + ' — ' + why)
+        if ok:
+            good.append(un)
+    lines.insert(1, 'годных: ' + str(len(good)))
+    txt = chr(10).join(lines)
+    try:
+        open(os.path.join(BASE_DIR, '_groups.txt'), 'w', encoding='utf-8').write(txt + chr(10) + chr(10) + chr(10).join('@' + g for g in good))
+    except Exception:
+        pass
+    try:
+        await m.edit(txt[:3500])
+    except Exception:
+        await e.reply(txt[:3500])
+
+
 async def probe_cmd(e, arg):
     if not arg:
         return await e.reply('напиши: /probe ссылка')
@@ -759,6 +804,8 @@ async def msg_route(e, txt):
         return await e.reply('выбери вертикаль:', buttons=cat_kb())
     if cmd == '/selftest':
         return await selftest(e)
+    if cmd == '/scan':
+        return await scan(e, arg)
     if cmd == '/probe':
         return await probe_cmd(e, arg)
     if cmd == '/build':
@@ -840,7 +887,7 @@ def _hook():
             t = (e.raw_text or '').strip()
         except Exception:
             t = ''
-        if t.startswith('/') and t.split()[0].split('@')[0].lower() in ('/selftest', '/pool'):
+        if t.startswith('/') and t.split()[0].split('@')[0].lower() in ('/selftest', '/pool', '/scan'):
             return await msg_route(e, t)
         return None
     _sub_msg._sub = True

@@ -1250,7 +1250,7 @@ async def main():
                 except Exception as ex2:
                     await e.respond('не смог разобрать эту ссылку: %s' % type(ex2).__name__)
             return
-        if txt.startswith('/selftest') or txt.startswith('/pool'):
+        if txt.startswith('/selftest') or txt.startswith('/pool') or txt.startswith('/scan'):
             return
         await e.respond('нажми /start. команды: /find, /add, /join, /probe, /build')
 
