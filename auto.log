@@ -1,0 +1,27 @@
+nohup: ignoring input
+> join2.py us
+wait 174 kripta_chat_reklama
+joined kripta_chat_reklama
+joined referallgroup
+joined incrypted_airdrop_chat
+joined p2p_work_leaders_chat
+joined cryptop2pppppz
+> pack.py ИТОГО 6450 | премиум 1308 | ядро A/2+ 114
+вычищено {'боты': 16, 'удалённые': 0, 'без юзернейма': 3185, 'дубли': 340, 'чатов': 10}
+-> out/crypto_targets_6450.csv
+сырьё: out/crypto_targets_6450.txt
+> clean.py ГОТОВО out/crypto_pack | all 0 | core 0 | premium 0 | просев {'нет ника': 0, 'кривой ник': 6449, 'дубль': 0}
+> preview.py demo.html готов: 0 всего / 0 ядро
+> -czf 
+> out/crypto_pack.tar.gz 
+> out/crypto_pack/demo.html 
+на полке готовых баз: 2
+> add 
+> add 
+> commit [main 90e2aea] ready crypto
+ 2 files changed, 26 insertions(+)
+ create mode 100644 demo_crypto.html
+ create mode 100644 ready/crypto_pack.tar.gz
+> push To https://github.com/worktxtazap-cmd/hunter.git
+   f1ba8be..90e2aea  main -> main
+ГОТОВО: crypto

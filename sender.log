@@ -1,0 +1,14 @@
+к отправке: 6
+1 @Owneti000 9 рассылк | Привет! Видел ваше сообщение про рассылку.  Соберу базу под рассылку: 
+2 @happy29301 9 рассылк | Привет! Видел ваше сообщение про рассылку.  Соберу базу под рассылку: 
+3 @digitaltender 9 лид | Привет! Видел ваше сообщение про лиды - я как раз этим занимаюсь.  Соб
+4 @brnndda 8 лид | Привет! Видел ваше сообщение про лиды - я как раз этим занимаюсь.  Соб
+5 @o4yhuvfnl4gx 8 рассылк | Привет! Видел ваше сообщение про рассылку.  Соберу базу под рассылку: 
+6 @TallonAmazonReklama9 8 парс | Привет! Видел ваше сообщение про парсинг - я как раз этим занимаюсь.  
+ok 1 @Owneti000
+ok 2 @happy29301
+fail 3 @digitaltender ChatWriteForbiddenError You can't write in this chat (caused by SendMessageRequest)
+fail 4 @brnndda PeerFloodError The account is limited (spam-reported) and cannot message non-contacts; account-wide with no defined duration, so retrying will not help. Check @SpamBot (caused by SendMessageRequest)
+fail 5 @o4yhuvfnl4gx PeerFloodError The account is limited (spam-reported) and cannot message non-contacts; account-wide with no defined duration, so retrying will not help. Check @SpamBot (caused by SendMessageRequest)
+fail 6 @TallonAmazonReklama9 PeerFloodError The account is limited (spam-reported) and cannot message non-contacts; account-wide with no defined duration, so retrying will not help. Check @SpamBot (caused by SendMessageRequest)
+отправлено: 2

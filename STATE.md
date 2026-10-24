@@ -285,3 +285,60 @@ NEXT
 - боевой круг оплаты не подтверждён
 - ниши market/smm/hr/gamble/dating не добиты
 - таймер на auto.py
+
+## 21.10.2026 vecher - Izbrannoe vychishcheno, uvedomleniya perepisany, avtootvet vyklyuchen
+
+### hunter.py
+- notify() perepisan: polnyy blok (ssylka t.me/chat/msg, @nik, "chto iskal", gotovyy otvet, @hunter_pay_bot), status='hot', NOTIFY_MAX=8 za cikl, FloodWait perezhivaet, save_hit vozvratit id
+
+### drafts.py
+- PAT rasshiren: zagotovki, avtootvet, hunter storozh, hunter start, qr dlya vhoda, novyh zayavok, s nikom, otvety v chaty, chto iskal
+- wipe hodit po 2 sessiyam (login=acc1, drafts2=acc2), limit 1500, pick isklyuchaet 'hot'
+- zagolovok cherez say(), pauza 5s
+- udaleno 85 soobshcheniy musora (10 acc1, 75 acc2)
+
+### hot.py
+- dedupe po niku + isklyuchenie 'draft'/'hot'/'sent' (byl bag: @okacste 9 raz podryad)
+- zagolovok cherez say(), pauza 5s
+
+### sync.py
+- ubrano uvedomlenie AVTOOTVET v Izbrannoe
+- avtootvet sgruppirovan po niku (group by username, answered=1 where username=?)
+- SYNC_MAX_ANSWER=0 -> avtootvet vyklyuchen, sinhronizatsiya statusov rabotaet
+
+### watchdog.py
+- pishet v Izbrannoe tolko pri probleme (bylo kazhdye 15 min "test, vse ok")
+
+### prochee
+- chown sessions/logs/*.py/*.sh/*.md/.env na ubuntu (hot.session byl root i readonly)
+- .env: DRAFTS_MAX_PEND=80, HOT_MAX_PEND=40, NOTIFY_MAX=8, SYNC_MAX_ANSWER=0
+- VYYASNENO: login.session == drafts1.session (acc1 @softzoneua2026), drafts2.session == hot.session (acc2 @SoftzoneUA), login2.session mert
+- roli: acc1 = priem/skaner (v PeerFlood), acc2 = otpravka
+- ZAVTRA 11:35 UTC snimaetsya PeerFlood s acc1 -> mozhno vernut --both
+- 8 dubley @okacste v Izbrannom udalit rukami
+
+### chto dalshe
+- glavnoe: tapnut po zagotovkam v Izbrannom i napisat lyudyam
+- posle pervoy oplaty proverit vseyu tsepochku vydachi cherez @hunter_pay_bot
+- priglushit hunter-build.timer: kazhdye 5 min pishet "oplachennyh zakazov net" v log
+
+## Замысел: воронка скидок и домонетизация (23.10)
+
+### 1. Проведи клиента — получи скидку
+- прохождение демо и квиза выдаёт купон с таймером 24 часа
+- база есть: купон START создаётся в seed, closer дожимает смотревших без покупки
+- добавить: купон за прохождение квиза и за 3+ просмотра примеров
+- выгода: повод вернуться, у нас — лид с историей интереса
+
+### 2. Реферал «приведи друга — вернём 15%»
+- личная ссылка с меткой, друг оплатил → скидка автору на следующий заказ
+- в botleads уже есть src; добавить ref_by, ref_paid; отсекать самопривод по uid
+- выгода: бесплатный канал трафика
+
+### 3. Домонетизация бота
+- доработка под клиента +30
+- обслуживание 5-10 в месяц: хостинг, правки, обновления
+- эксклюзив на нишу — бот продаётся один раз в одну сферу
+- объём: парсер свыше 10 000 ников — доплата за каждую 1000
+- срочность: +50% за сборку за сутки
+- повторный парс по расписанию и обновление баз — подписка

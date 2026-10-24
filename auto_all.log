@@ -1,0 +1,198 @@
+> discover.py
+hidden dropshiping_ukr 184969
+hidden wildberries_professional 122101
+hidden Dropshipping_Ukraina_opt 73671
+hidden dropshipping_tovarka_ukr 53331
+hidden sadovod_chatik 31279
+hidden dropshiping_opt1 23890
+hidden raspakovkacpek 18062
+hidden sellery_wb_ozon 11750
+hidden wildberries_service 7808
+OK podslush_wbe 7358
+hidden ManagSellersMP 6332
+hidden SellerManagMP 6075
+hidden vb_oz_chat 5776
+OK sellforce_chat 5499
+hidden MPManagSellerMP 5496
+hidden ManagMPSellers 5283
+hidden wildberries_ozon_postavshchiki 4089
+hidden sellery_markety 3991
+ИТОГО 2 -> out/market_targets.json
+> join2.py
+целей: 2
+joined podslush_wbe
+joined sellforce_chat
+> pack.py
+podslush_wbe просмотрено 1000 | в базе 680
+sellforce_chat просмотрено 1000 | в базе 1153
+ИТОГО 1153 | премиум 115 | ядро A/2+ 13
+вычищено {'боты': 4, 'удалённые': 0, 'без юзернейма': 798, 'дубли': 43, 'чатов': 2}
+-> out/market_targets_1153.csv
+сырьё: out/market_targets_1153.csv
+> clean.py
+ГОТОВО out/market_pack | all 1153 | core 13 | premium 115 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 1153 всего / 13 ядро
+> -czf
+> out/market_pack.tar.gz
+> out/market_pack/demo.html
+на полке готовых баз: 4
+> add
+> add
+> commit
+[main d293d90] ready market
+ 2 files changed, 38 insertions(+)
+ create mode 100644 demo_market.html
+ create mode 100644 ready/market_pack.tar.gz
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   514dcc3..d293d90  main -> main
+ГОТОВО: market
+> discover.py
+hidden smmbunker 17600
+OK RudenkoSMM 16399
+OK smm_talking 14373
+hidden aktivnosti_smm 13161
+hidden smm_cpa 9215
+hidden smm_chat 8874
+OK You_Chat 4858
+hidden real_targetolog 4592
+hidden smm_digital_chat 4474
+hidden targettovarka 3780
+ИТОГО 3 -> out/smm_targets.json
+> join2.py
+целей: 3
+joined RudenkoSMM
+joined smm_talking
+joined You_Chat
+> pack.py
+RudenkoSMM просмотрено 1000 | в базе 841
+smm_talking просмотрено 1000 | в базе 1607
+You_Chat просмотрено 1000 | в базе 2245
+ИТОГО 2245 | премиум 666 | ядро A/2+ 2
+вычищено {'боты': 4, 'удалённые': 0, 'без юзернейма': 744, 'дубли': 4, 'чатов': 3}
+-> out/smm_targets_2245.csv
+сырьё: out/smm_targets_2245.csv
+> clean.py
+ГОТОВО out/smm_pack | all 2245 | core 2 | premium 666 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 2245 всего / 2 ядро
+> -czf
+> out/smm_pack.tar.gz
+> out/smm_pack/demo.html
+на полке готовых баз: 5
+> add
+> add
+> commit
+[main 6078f5a] ready smm
+ 2 files changed, 27 insertions(+)
+ create mode 100644 demo_smm.html
+ create mode 100644 ready/smm_pack.tar.gz
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   d293d90..6078f5a  main -> main
+ГОТОВО: smm
+> discover.py
+hidden PooTraff 33685
+OK freelance_chatik0 31518
+OK freelance_vakansiii 23070
+hidden robota_kiev_vakansii_rekruting 15777
+hidden cpa_traffic_chat 14868
+hidden top_vakansiy 12765
+hidden cpa_hr_traffic 12319
+hidden chat_vakansii2 7191
+OK feedback_rabota 5142
+OK podrabotai_chat 3841
+hidden vakansii_ah 3156
+ИТОГО 4 -> out/hr_targets.json
+> join2.py
+целей: 4
+joined freelance_chatik0
+joined freelance_vakansiii
+wait 85 feedback_rabota
+joined feedback_rabota
+joined podrabotai_chat
+> pack.py
+freelance_chatik0 просмотрено 1000 | в базе 662
+freelance_vakansiii просмотрено 1000 | в базе 1219
+feedback_rabota просмотрено 1000 | в базе 1825
+podrabotai_chat просмотрено 1000 | в базе 2476
+ИТОГО 2476 | премиум 490 | ядро A/2+ 37
+вычищено {'боты': 2, 'удалённые': 0, 'без юзернейма': 1418, 'дубли': 100, 'чатов': 4}
+-> out/hr_targets_2476.csv
+сырьё: out/hr_targets_2476.csv
+> clean.py
+ГОТОВО out/hr_pack | all 2476 | core 37 | premium 490 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 2476 всего / 37 ядро
+> -czf
+> out/hr_pack.tar.gz
+> out/hr_pack/demo.html
+на полке готовых баз: 12
+> add
+> add
+> commit
+[main bf57117] ready hr
+ 2 files changed, 62 insertions(+)
+ create mode 100644 demo_hr.html
+ create mode 100644 ready/hr_pack.tar.gz
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   8d86f2d..bf57117  main -> main
+ГОТОВО: hr
+> discover.py
+ИТОГО 0 -> out/gamble_targets.json
+> join2.py
+целей: 0
+> pack.py
+ИТОГО 0 | премиум 0 | ядро A/2+ 0
+вычищено {'боты': 0, 'удалённые': 0, 'без юзернейма': 0, 'дубли': 0, 'чатов': 0}
+-> out/gamble_targets_0.csv
+сырьё: out/gamble_targets_0.csv
+> clean.py
+ГОТОВО out/gamble_pack | all 0 | core 0 | premium 0 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 0 всего / 0 ядро
+> -czf
+> out/gamble_pack.tar.gz
+> out/gamble_pack/demo.html
+на полке готовых баз: 13
+> add
+> add
+> commit
+[main 3b5077a] ready gamble
+ 2 files changed, 26 insertions(+)
+ create mode 100644 demo_gamble.html
+ create mode 100644 ready/gamble_pack.tar.gz
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   bf57117..3b5077a  main -> main
+ГОТОВО: gamble
+> discover.py
+ИТОГО 0 -> out/dating_targets.json
+> join2.py
+целей: 0
+> pack.py
+ИТОГО 0 | премиум 0 | ядро A/2+ 0
+вычищено {'боты': 0, 'удалённые': 0, 'без юзернейма': 0, 'дубли': 0, 'чатов': 0}
+-> out/dating_targets_0.csv
+сырьё: out/dating_targets_0.csv
+> clean.py
+ГОТОВО out/dating_pack | all 0 | core 0 | premium 0 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 0 всего / 0 ядро
+> -czf
+> out/dating_pack.tar.gz
+> out/dating_pack/demo.html
+на полке готовых баз: 14
+> add
+> add
+> commit
+[main fc83dd1] ready dating
+ 2 files changed, 26 insertions(+)
+ create mode 100644 demo_dating.html
+ create mode 100644 ready/dating_pack.tar.gz
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   3b5077a..fc83dd1  main -> main
+ГОТОВО: dating

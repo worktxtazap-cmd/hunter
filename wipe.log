@@ -1,0 +1,53 @@
+удалено сообщений: 22
+Traceback (most recent call last):
+  File "/home/ubuntu/hunter/drafts.py", line 136, in <module>
+    main()
+  File "/home/ubuntu/hunter/drafts.py", line 133, in main
+    asyncio.run(make(con))
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ubuntu/hunter/drafts.py", line 73, in make
+    await say(c, body)
+          ^^^
+NameError: name 'say' is not defined
+удалено сообщений: 16
+1 @Bauerme 11 аудитор
+2 @supertehnikII 11 базы
+3 @AnyaSuperManager 11 контакт
+4 @MargoStyleS 11 парс
+5 @AnyaDesignClusive 11 парс
+6 @angelinazamkovaya 11 лид
+7 @Fuldevvv 11 базы
+8 @parsingmaster 11 база
+9 @Mmmmmmaloy 11 аудитор
+10 @mytech_support 10 рассылк
+11 @AntHRwork 10 рассылк
+12 @albertsmmmarketolog 10 аудитор
+13 @CoachZver 10 рассылк
+14 @Vasilisa_Youtube 10 контакт
+15 @ProMontage_AmeliyaekeepskCDdlf 10 контакт
+готово, заготовок: 15
+1 @alinaa_0209 10 аудитор
+2 @brnndda 10 лид
+3 @EseniyaHarova 9 контакт
+4 @NatalyaTheBest 9 аудитор
+5 @psixolog_Felina 9 контакт
+wait 203
+6 @blackrouk 9 лид
+7 @EkaterinaShumt 9 контакт
+8 @Haibensoff 9 рассылк
+9 @pabotnik_goda 9 контакт
+10 @AI_FreeLance_info 9 выгрузк
+11 @Limnchki 9 аудитор
+12 @icydevcode 9 базы
+13 @AlexandraAsak 9 парс
+14 @Nataly_BellaChiao 8 контакт
+15 @brosky19 8 рассылк
+готово, заготовок: 15

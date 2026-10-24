@@ -74,21 +74,21 @@ async def make(con):
     await c.connect()
     if not await c.is_user_authorized():
         print('NOT AUTHORIZED', SESSION); return
-    await c.send_message('me', 'ЗАГОТОВКИ %s, %d шт. тапни ник, скопируй текст ниже' % (ACC, len(tg)))
+    await say(c, 'ЗАГОТОВКИ %s, %d шт. тапни ник, скопируй текст ниже' % (ACC, len(tg)))
     for j2, r in enumerate(tg, 1):
         hid, u, sc, kw, txt, ch = r
         body = '@%s\n\n%s\n\n%s' % (u, text_of(r), templates.LINK)
         await say(c, body)
-        await asyncio.sleep(2)
+        await asyncio.sleep(5)
         con.execute("update hits set status='draft' where id=?", (hid,))
         print(j2, '@' + u, sc, kw)
     con.commit()
     await c.disconnect()
     print('done drafts', len(tg))
 
-PAT = ('заготовки', 'привет! видел ваш пост', 'делаю телеграм-ботов', 'пример, как выглядит база', 'новых заявок', 'с ником', 'ответы в чаты', 'что искал')
+PAT = ('заготовки', 'автоответ', 'hunter сторож', 'hunter старт', 'qr для входа', 'новых заявок', 'с ником', 'ответы в чаты', 'что искал')
 
-WIPE_SESSIONS = ('sessions/login.session', 'sessions/drafts1.session', 'sessions/drafts2.session', 'sessions/hot.session')
+WIPE_SESSIONS = ('sessions/login.session', 'sessions/drafts2.session')
 
 async def wipe(con):
     total = 0
@@ -101,7 +101,7 @@ async def wipe(con):
             if not await c.is_user_authorized():
                 print('not authorized', s); continue
             ids = []
-            async for m in c.iter_messages('me', limit=600):
+            async for m in c.iter_messages('me', limit=1500):
                 t = (m.message or '').lower()
                 if not t:
                     continue

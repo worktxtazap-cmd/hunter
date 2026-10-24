@@ -1,0 +1,24 @@
+nohup: ignoring input
+> join2.py ite-packages/telethon/sessions/sqlite.py", line 210, in _update_session_table
+    c.execute('delete from sessions')
+sqlite3.OperationalError: database is locked
+> pack.py  базе 937
+ИТОГО 937 | премиум 362 | ядро A/2+ 0
+вычищено {'боты': 0, 'удалённые': 0, 'без юзернейма': 63, 'дубли': 0, 'чатов': 1}
+-> out/infobiz_targets_937.csv
+сырьё: out/infobiz_targets_937.csv
+> clean.py ГОТОВО out/infobiz_pack | all 937 | core 0 | premium 362 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py demo.html готов: 937 всего / 0 ядро
+> -czf 
+> out/infobiz_pack.tar.gz 
+> out/infobiz_pack/demo.html 
+на полке готовых баз: 3
+> add 
+> add 
+> commit [main 514dcc3] ready infobiz
+ 2 files changed, 75 insertions(+)
+ create mode 100644 demo_infobiz.html
+ create mode 100644 ready/infobiz_pack.tar.gz
+> push To https://github.com/worktxtazap-cmd/hunter.git
+   d3db1ce..514dcc3  main -> main
+ГОТОВО: infobiz

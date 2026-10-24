@@ -1,0 +1,52 @@
+> join2.py
+целей: 0
+> pack.py
+ИТОГО 0 | премиум 0 | ядро A/2+ 0
+вычищено {'боты': 0, 'удалённые': 0, 'без юзернейма': 0, 'дубли': 0, 'чатов': 0}
+-> out/gamble_targets_0.csv
+сырьё: out/gamble_targets_0.csv
+> clean.py
+ГОТОВО out/gamble_pack | all 0 | core 0 | premium 0 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 0 всего / 0 ядро
+> -czf
+> out/gamble_pack.tar.gz
+> out/gamble_pack/demo.html
+на полке готовых баз: 19
+> add
+> add
+> commit
+[main f33fd6b] ready gamble
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at a6bb204a2212c506b9d37d168414c24d2a4864df but expected 748482cd80dbec906722b53723ada34c194226b0)
+error: failed to push some refs to 'https://github.com/worktxtazap-cmd/hunter.git'
+ГОТОВО: gamble
+> join2.py
+целей: 0
+> pack.py
+ИТОГО 0 | премиум 0 | ядро A/2+ 0
+вычищено {'боты': 0, 'удалённые': 0, 'без юзернейма': 0, 'дубли': 0, 'чатов': 0}
+-> out/dating_targets_0.csv
+сырьё: out/dating_targets_0.csv
+> clean.py
+ГОТОВО out/dating_pack | all 0 | core 0 | premium 0 | просев {'нет ника': 0, 'кривой ник': 0, 'дубль': 0}
+> preview.py
+demo.html готов: 0 всего / 0 ядро
+> -czf
+> out/dating_pack.tar.gz
+> out/dating_pack/demo.html
+на полке готовых баз: 19
+> add
+> add
+> commit
+[main 61ec16f] ready dating
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+> push
+To https://github.com/worktxtazap-cmd/hunter.git
+   a6bb204..61ec16f  main -> main
+ГОТОВО: dating
+> discover.py
+err Sport_Chatw The channel specified is private an
+ИТОГО 0 -> out/gamble_targets.json

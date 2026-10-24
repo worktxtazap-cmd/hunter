@@ -104,7 +104,7 @@ async def main():
     con.commit()
 
     replied = 0
-    todo = con.execute("select username, msg_id, text from replies where answered=0 order by id desc limit ?", (MAX_ANSWER,)).fetchall()
+    todo = con.execute("select username, max(msg_id), max(text) from replies where answered=0 group by username order by max(id) desc limit ?", (MAX_ANSWER,)).fetchall()
     for u, mid, t in todo:
         try:
             ent = await c.get_entity(u)
@@ -113,11 +113,10 @@ async def main():
         txt = answer_for(t)
         try:
             await c.send_message(ent, txt)
-            con.execute("update replies set answered=1 where username=? and msg_id=?", (u, mid))
+            con.execute("update replies set answered=1 where username=?", (u,))
             con.commit()
             replied += 1
             print('автоответ', '@' + u)
-            await c.send_message('me', 'АВТООТВЕТ @%s на: %s\n---\n%s' % (u, t.replace(chr(10), ' ')[:120], txt))
         except ChatWriteForbiddenError:
             print('ЛС закрыты', u)
         except FloodWaitError as e:

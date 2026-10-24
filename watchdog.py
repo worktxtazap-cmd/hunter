@@ -102,7 +102,7 @@ def main():
     for x in probs:
         print(ts, 'ПРОБЛЕМА:', x)
     print('%s заготовок %d, отправлено всего %d, годных %d, место %d МБ' % (ts, drafts, sent, good, disk_mb()))
-    if probs or '--test' in sys.argv:
+    if probs:
         txt = 'HUNTER сторож ' + ts + '\n' + ('\n'.join(probs) if probs else 'тест, всё ок')
         txt += '\nзаготовок: %d, отправлено: %d, годных: %d' % (drafts, sent, good)
         asyncio.run(send(txt))
