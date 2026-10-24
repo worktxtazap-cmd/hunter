@@ -275,37 +275,38 @@ async def probe_parse(link):
     if u is None:
         return False, 'нет парсер-сессии'
     joined = False
-    n = 0
-    reason = 'участники скрыты'
     try:
         ent = await u.get_entity(link)
     except Exception as ex:
+        log('probe %s: get_entity %s' % (link, err_ru(ex)))
         return False, err_ru(ex)
     try:
         try:
             await join_ent(ent)
             joined = True
-        except Exception:
-            pass
+        except Exception as ex:
+            log('probe %s: join %s' % (link, err_ru(ex)))
         await asyncio.sleep(1)
-        for agg in (True, False):
-            n = 0
+        n, err = 0, 'участники скрыты'
+        for agg in (False, True):
             try:
-                async for _ in u.iter_participants(ent, aggressive=agg, limit=40):
-                    n += 1
+                got = await u.get_participants(ent, limit=60, aggressive=agg)
+                n = len(got)
+                log('probe %s: agg=%s n=%d' % (link, agg, n))
                 if n:
                     break
             except Exception as ex:
-                reason = err_ru(ex)
+                err = err_ru(ex)
+                log('probe %s: agg=%s fail %s' % (link, agg, err))
+        if n == 0:
+            return False, err
+        return True, 'видно %d' % n
     finally:
         if CFG.get('PARSER_LEAVE') and joined:
             try:
                 await leave_ent(ent)
             except Exception:
                 pass
-    if n == 0:
-        return False, reason
-    return True, 'видно %d' % n
 
 
 probe_chat = probe_parse
