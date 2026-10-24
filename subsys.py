@@ -777,11 +777,14 @@ async def cb_route(e, d):
     return None
 
 
-def _export():
+def _export(g):
+    if g is None:
+        return
     for n in ('probe_parse', 'btn_label', 'price_for'):
         f = globals().get(n)
-        if f is not None and SG:
-            SG[n] = f
+        if f is not None:
+            g[n] = f
+            say('экспорт ' + n)
 
 
 def deliver_dyn(*a, **kw):
@@ -850,6 +853,6 @@ def install(g, loc=None):
         pass
     _tables()
     _seed()
-    _export()
+    _export(g)
     _hook()
     log('installed testmode=%s live=%s prem=%s leave=%s' % (CFG['TESTMODE'], CFG['RATE_LIVE'], CFG['RATE_PREMIUM'], CFG['PARSER_LEAVE']))
