@@ -785,7 +785,7 @@ def _export(g):
         f = globals().get(n)
         if f is not None:
             g[n] = f
-            say('экспорт ' + n)
+            log('экспорт ' + n)
 
 
 def deliver_dyn(*a, **kw):
