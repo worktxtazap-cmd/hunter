@@ -95,7 +95,7 @@ CATS = {
 }
 
 SEED = {
-    'crypto': ['cryptocurrencytalk', 'crypto', 'bitcoin'],
+    'crypto': ['cryptocurrencyj', 'tectumglobal', 'vexaniumid', 'inery_blockchain', 'EuropeanBlockchainConvention', 'blockchainm', 'CryptoDenisNFT_chat', 'coinsbit_chat', 'cryptoxpress_chat', 'cryptotekhnikchat'],
     'freelance': ['freelancechat', 'freelancers'],
     'hr': ['vacancychat', 'rabota'],
     'smm': ['smmchat'],

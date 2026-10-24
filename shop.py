@@ -410,6 +410,11 @@ async def pick_parseable(res):
 
 async def find_send(e, q, cat=''):
     print('find start', q, cat, flush=True)
+    if not cat:
+        for _k, _v in SEARCH.items():
+            if _v == q.lower():
+                cat = _k
+                break
     try:
         print('user conn', bool(USER), USER.is_connected() if USER else False, flush=True)
     except Exception as ex:
@@ -426,6 +431,17 @@ async def find_send(e, q, cat=''):
     if res and isinstance(res[0], str):
         await e.respond('\n'.join(res))
         return
+    if cat:
+        have = set(x[0].lower() for x in res if not isinstance(x, str))
+        pre = []
+        for sl in cat_links(cat):
+            s2 = sl if sl.startswith('@') else '@' + sl
+            if s2.lower() not in have:
+                pre.append((s2, '', None))
+                have.add(s2.lower())
+        if pre:
+            res = pre + [x for x in res if not isinstance(x, str)]
+            print('find seeds', len(pre), flush=True)
     ok, bad = await pick_parseable(res[:8] if res else [])
     words = list(EXTRA.get(cat, []))
     used = []
