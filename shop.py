@@ -348,10 +348,21 @@ async def find_chats(q, limit=20):
     try:
         res = await USER(tl_functions.contacts.SearchRequest(q=q, limit=max(50, limit)))
     except Exception as ex:
+        diag('поиск %s: ошибка %s' % (q, err_ru(ex)))
         return ['ошибка поиска: %s' % err_ru(ex)]
-    out = []
+    chats = list(res.chats)
+    try:
+        g = await USER(tl_functions.messages.SearchGlobalRequest(
+            q=q, filter=tl_types.InputMessagesFilterEmpty(), min_date=None, max_date=None,
+            offset_rate=0, offset_peer=tl_types.InputPeerEmpty(), offset_id=0, limit=max(50, limit)))
+        ids = set(getattr(x, 'id', 0) for x in chats)
+        for c in g.chats:
+            if getattr(c, 'id', 0) not in ids:
+                chats.append(c)
+    except Exception as ex:
+        diag('глобальный поиск %s: %s' % (q, type(ex).__name__))
     groups, chans = [], []
-    for c in res.chats:
+    for c in chats:
         u = getattr(c, 'username', None)
         if not u:
             continue
@@ -360,7 +371,7 @@ async def find_chats(q, limit=20):
             groups.append(item)
         else:
             chans.append(item)
-    print('find: групп %d, каналов %d' % (len(groups), len(chans)), flush=True)
+    diag('поиск %s: всего %d, групп %d, каналов %d' % (q, len(chats), len(groups), len(chans)))
     return groups + chans
 
 

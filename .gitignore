@@ -8,3 +8,4 @@ demo_out/
 hunter.db
 .env
 _last.txt
+_diag.txt

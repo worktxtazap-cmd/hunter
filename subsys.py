@@ -270,6 +270,18 @@ async def parse_chat(ent, limit=800):
                 pass
 
 
+def diag(s):
+    try:
+        f = os.path.join(BASE_DIR, '_diag.txt')
+        lines = []
+        if os.path.exists(f):
+            lines = [x for x in open(f, encoding='utf-8', errors='ignore').read().split(chr(10)) if x]
+        lines.append(time.strftime('%H:%M:%S') + ' ' + str(s))
+        open(f, 'w', encoding='utf-8').write(chr(10).join(lines[-40:]) + chr(10))
+    except Exception:
+        pass
+
+
 async def probe_parse(link):
     u = _parser()
     if u is None:
@@ -278,28 +290,33 @@ async def probe_parse(link):
     try:
         ent = await u.get_entity(link)
     except Exception as ex:
-        log('probe %s: get_entity %s' % (link, err_ru(ex)))
+        diag('probe %s: get_entity %s' % (link, err_ru(ex)))
         return False, err_ru(ex)
     is_chan = bool(getattr(ent, 'broadcast', False)) and not bool(getattr(ent, 'megagroup', False))
-    log('probe %s: type=%s mega=%s bcast=%s' % (link, type(ent).__name__, getattr(ent, 'megagroup', None), getattr(ent, 'broadcast', None)))
+    diag('probe %s тип=%s мегагруппа=%s канал=%s' % (link, type(ent).__name__, getattr(ent, 'megagroup', None), is_chan))
     try:
         try:
             await join_ent(ent)
             joined = True
         except Exception as ex:
-            log('probe %s: join %s' % (link, err_ru(ex)))
+            diag('probe %s вход: %s' % (link, err_ru(ex)))
         await asyncio.sleep(2)
+        try:
+            e2 = await u.get_entity(link)
+            diag('probe %s после входа left=%s' % (link, getattr(e2, 'left', None)))
+        except Exception:
+            pass
         n, err = 0, ('канал — список только у админов' if is_chan else 'участники скрыты')
         for agg in (False, True):
             try:
                 got = await u.get_participants(ent, limit=60, aggressive=agg)
                 n = len(got)
-                log('probe %s: parts agg=%s n=%d' % (link, agg, n))
+                diag('probe %s участники agg=%s n=%d' % (link, agg, n))
                 if n:
                     break
             except Exception as ex:
                 err = err_ru(ex)
-                log('probe %s: parts agg=%s %s' % (link, agg, type(ex).__name__))
+                diag('probe %s участники agg=%s %s' % (link, agg, type(ex).__name__))
         if n == 0:
             return False, err
         return True, 'видно %d' % n
@@ -783,7 +800,7 @@ async def cb_route(e, d):
 def _export(g):
     if g is None:
         return
-    for n in ('probe_parse', 'btn_label', 'price_for'):
+    for n in ('probe_parse', 'btn_label', 'price_for', 'diag'):
         f = globals().get(n)
         if f is not None:
             g[n] = f
