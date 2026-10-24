@@ -346,16 +346,22 @@ def cat_links(cat):
 
 async def find_chats(q, limit=20):
     try:
-        res = await USER(tl_functions.contacts.SearchRequest(q=q, limit=limit))
+        res = await USER(tl_functions.contacts.SearchRequest(q=q, limit=max(50, limit)))
     except Exception as ex:
         return ['ошибка поиска: %s' % err_ru(ex)]
     out = []
+    groups, chans = [], []
     for c in res.chats:
         u = getattr(c, 'username', None)
         if not u:
             continue
-        out.append(('@' + u, getattr(c, 'title', '') or '', getattr(c, 'participants_count', None)))
-    return out
+        item = ('@' + u, getattr(c, 'title', '') or '', getattr(c, 'participants_count', None))
+        if getattr(c, 'megagroup', False) or isinstance(c, tl_types.Chat):
+            groups.append(item)
+        else:
+            chans.append(item)
+    print('find: групп %d, каналов %d' % (len(groups), len(chans)), flush=True)
+    return groups + chans
 
 
 EXTRA = {
